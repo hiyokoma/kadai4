@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <title>Firebase_version9_RealtimeDB(G'sACADEMY初学者用サンプル)</title>
+
+    <style>
+        #output {
+            background: pink;
+            height: 300px;
+            overflow: scroll;
+        }
+
+        .msg:nth-child(odd) {
+            width: 40%;
+            background: gainsboro;
+            margin-left: auto;
+            border-radius: 10px;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .msg:nth-child(even) {
+            background: green;
+            width: 40%;
+            padding: 10px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- コンテンツ表示画面 -->
+
+    <div>
+        <div>
+            <textarea id="text" cols="30" rows="10"></textarea>
+            <button id="send">送信</button>
+        </div>
+        <button id="st"><img src="23252703.png" width="150px"></button>
+        <div id="output"></div>
+    </div>
+    <!--/ コンテンツ表示画面 -->
+
+
+
+    <!-- JQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- JQuery -->
+
+    <!--** 以下Firebase **-->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js";
+
+        // 貼り付ける場所
+        import { getDatabase, ref, push, set, onChildAdded, remove, onChildRemoved } from "https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js";
+        // 
+
+
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBKWAUaXqgYXXyCWGzXMfKfdosoDlfPun8",
+             authDomain: "dev245-68c5a.firebaseapp.com",
+            databaseURL: "https://dev245-68c5a-default-rtdb.firebaseio.com",
+             projectId: "dev245-68c5a",
+            storageBucket: "dev245-68c5a.appspot.com",
+            messagingSenderId: "732331179377",
+             appId: "1:732331179377:web:64435a7493fc4030c0cad0"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+
+        // この辺りに書いていきます
+
+
+        const db = getDatabase(app);
+        const dbRef = ref(db, 'dev245');
+
+        // 送信処理を記述
+        $('#send').on('click', function () {
+
+ 
+            const text = $('#text').val();
+
+            // firebaseに送る準備をしていることになります🤗
+            const newPostRef = push(dbRef) //データを送信できる準備
+            set(newPostRef, text); // firebaseの登録できる場所に保存するイメージです🤗
+
+            $('#text').val("");
+
+            // send送信イベント この下消さない
+        });
+
+         $('#st').on('click', function () {
+
+            const st = "23252703.png";
+
+            const newPostRef = push(dbRef) //データを送信できる準備
+            set(newPostRef, st); // firebaseの登録できる場所に保存するイメージです🤗
+
+            $('#st').val("");
+
+
+            // send送信イベント この下消さない
+        });
+
+
+        $("#text").on('keydown',function (e){
+
+            
+
+        });
+
+    //受信処理
+
+   // 受信処理を記述
+   onChildAdded(dbRef, function (data) {
+            // ここからが受信処理が始まります
+
+            // 登録されたデータを取得します🤗
+            const msg = data.val();
+            console.log(msg, '取得したデータの塊')
+            const key = data.key;
+            console.log(key, 'データの塊にアクセス')
+
+            var h ="";
+            var e ="";
+
+            // es6のテンプレートリテラル
+
+            if (msg.indexOf('png') != -1) {
+                  console.log('文字列が含まれています。');
+                  var h = `
+                <div class="msg">
+                    <img src="${msg}" width="150px">
+                </div>    
+            `;  
+            $("#output").append(h);
+                        console.log(msg, '取得したデータの塊')
+
+                } else {
+                    console.log(msg);
+
+                let e = `
+                <div class="msg">
+                    <p>${msg}</p>
+                </div>    
+            `;
+            $("#output").append(e);
+
+        }
+            // htmlに埋め込みましょう🤗
+            // append();というjqueryのおまじないを使います
+            const output = document.getElementById('output');
+            output.scrollTo(0, output.scrollHeight);
+
+        })
+    
+  </script>
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
